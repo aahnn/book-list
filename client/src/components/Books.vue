@@ -30,13 +30,13 @@
                         class="btn btn-warning btn-sm"
                         v-b-modal.book-update-modal
                         @click="editBook(book)">
-                    Update
+                    Edit
                 </button>
                 <button
                         type="button"
                         class="btn btn-danger btn-sm"
                         @click="onDeleteBook(book)">
-                    Delete
+                    -
                 </button>
               </td>
             </tr>
