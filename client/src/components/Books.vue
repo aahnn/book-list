@@ -2,7 +2,7 @@
   <div class="container">
     <div class="row">
       <div class="col-sm-10">
-        <h1>Books</h1>
+        <h1>My Books</h1>
         <hr><br><br>
         <button type="button" class="btn btn-success btn-sm" v-b-modal.book-modal>Add Book</button>
         <br><br>
@@ -11,7 +11,7 @@
             <tr>
               <th scope="col">Title</th>
               <th scope="col">Author</th>
-              <th scope="col">Read?</th>
+              <th scope="col">Status</th>
               <th></th>
             </tr>
           </thead>
@@ -20,8 +20,9 @@
               <td>{{ book.title }}</td>
               <td>{{ book.author }}</td>
               <td>
-                <span v-if="book.read">Yes</span>
-                <span v-else>No</span>
+                <!--<span v-if="book.read">Yes</span>-->
+                <!--<span v-else>No</span>-->
+                <span>{{book.status}}</span>
               </td>
               <td>
                 <button
@@ -69,8 +70,11 @@
             </b-form-input>
           </b-form-group>
         <b-form-group id="form-read-group">
-          <b-form-checkbox-group v-model="addBookForm.read" id="form-checks">
-            <b-form-checkbox value="true">Read?</b-form-checkbox>
+          <b-form-checkbox-group v-model="addBookForm.status" id="form-checks">
+            <b-form-checkbox value=Finished>Finished</b-form-checkbox>
+            <b-form-checkbox value="Want to read">Want to read</b-form-checkbox>
+            <b-form-checkbox value=Reading>Reading</b-form-checkbox>
+            <b-form-checkbox value="Dropped">Dropped</b-form-checkbox>
           </b-form-checkbox-group>
         </b-form-group>
         <b-button type="submit" variant="primary">Submit</b-button>
@@ -124,13 +128,13 @@ export default {
       addBookForm: {
         title: '',
         author: '',
-        read: [],
+        status: [],
       },
       editForm: {
         id: '',
         title: '',
         author: '',
-        read: [],
+        status: [],
       },
     };
   },
@@ -176,21 +180,19 @@ export default {
     initForm() {
       this.addBookForm.title = '';
       this.addBookForm.author = '';
-      this.addBookForm.read = [];
+      this.addBookForm.status = [];
       this.editForm.id = '';
       this.editForm.title = '';
       this.editForm.author = '';
-      this.editForm.read = [];
+      this.editForm.status = [];
     },
     onSubmit(evt) {
       evt.preventDefault();
       this.$refs.addBookModal.hide();
-      let read = false;
-      if (this.addBookForm.read[0]) read = true;
       const payload = {
         title: this.addBookForm.title,
         author: this.addBookForm.author,
-        read, // property shorthand
+        status: this.addBookForm.status[0],
       };
       this.addBook(payload);
       this.initForm();
@@ -198,12 +200,10 @@ export default {
     onSubmitUpdate(evt) {
       evt.preventDefault();
       this.$refs.editBookModal.hide();
-      let read = false;
-      if (this.editForm.read[0]) read = true;
       const payload = {
         title: this.editForm.title,
         author: this.editForm.author,
-        read,
+        status: this.addBookForm.status[0],
       };
       this.updateBook(payload, this.editForm.id);
     },
@@ -216,15 +216,13 @@ export default {
       evt.preventDefault();
       this.$refs.editBookModal.hide();
       this.initForm();
-      this.getBooks(); // why?
+      this.getBooks();
     },
     removeBook(bookID) {
       const path = `http://localhost:5000/books/${bookID}`;
       axios.delete(path)
         .then(() => {
           this.getBooks();
-          this.message = 'Book removed!';
-          this.showMessage = true;
         })
         .catch((error) => {
           // eslint-disable-next-line

@@ -31,7 +31,7 @@ def all_books():
             'id': uuid.uuid4().hex,
             'title': post_data.get('title'),
             'author': post_data.get('author'),
-            'read': post_data.get('read')
+            'status': post_data.get('status')
         })
         response_object['message'] = 'Book added!'
     else:
@@ -49,7 +49,7 @@ def single_book(book_id):
             'id': uuid.uuid4().hex,
             'title': post_data.get('title'),
             'author': post_data.get('author'),
-            'read': post_data.get('read')
+            'status': post_data.get('status')
         })
         response_object['message'] = 'Book updated!'
     if request.method == 'DELETE':
