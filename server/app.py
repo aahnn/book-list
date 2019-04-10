@@ -16,12 +16,6 @@ CORS(app)
 BOOKS = []
 
 
-# sanity check route
-@app.route('/ping', methods=['GET'])
-def ping_pong():
-    return jsonify('pong!')
-
-
 @app.route('/books', methods=['GET', 'POST'])
 def all_books():
     response_object = {'status': 'success'}
@@ -31,7 +25,8 @@ def all_books():
             'id': uuid.uuid4().hex,
             'title': post_data.get('title'),
             'author': post_data.get('author'),
-            'status': post_data.get('status')
+            'status': post_data.get('status'),
+            'rating': post_data.get('rating')
         })
         response_object['message'] = 'Book added!'
     else:
@@ -49,7 +44,8 @@ def single_book(book_id):
             'id': uuid.uuid4().hex,
             'title': post_data.get('title'),
             'author': post_data.get('author'),
-            'status': post_data.get('status')
+            'status': post_data.get('status'),
+            'rating': post_data.get('rating')
         })
         response_object['message'] = 'Book updated!'
     if request.method == 'DELETE':

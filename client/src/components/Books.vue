@@ -12,6 +12,7 @@
               <th scope="col">Title</th>
               <th scope="col">Author</th>
               <th scope="col">Status</th>
+              <th scope="col">Rating</th>
               <th></th>
             </tr>
           </thead>
@@ -19,11 +20,8 @@
             <tr v-for="(book, index) in books" :key="index">
               <td>{{ book.title }}</td>
               <td>{{ book.author }}</td>
-              <td>
-                <!--<span v-if="book.read">Yes</span>-->
-                <!--<span v-else>No</span>-->
-                <span>{{book.status}}</span>
-              </td>
+              <td><span>{{book.status}}</span></td>
+              <td><span>{{book.rating}}</span></td>
               <td>
                 <button
                         type="button"
@@ -65,15 +63,23 @@
             <b-form-input id="form-author-input"
                           type="text"
                           v-model="addBookForm.author"
-                          required
                           placeholder="Enter author">
+            </b-form-input>
+          </b-form-group>
+        <b-form-group id="form-rating-group"
+                      label="Rating:"
+                      label-for="form-rating-input">
+            <b-form-input id="form-rating-input"
+                          type="text"
+                          v-model="addBookForm.rating"
+                          placeholder="Enter rating out of 10">
             </b-form-input>
           </b-form-group>
         <b-form-group id="form-read-group">
           <b-form-checkbox-group v-model="addBookForm.status" id="form-checks">
-            <b-form-checkbox value=Finished>Finished</b-form-checkbox>
+            <b-form-checkbox value="Finished">Finished</b-form-checkbox>
             <b-form-checkbox value="Want to read">Want to read</b-form-checkbox>
-            <b-form-checkbox value=Reading>Reading</b-form-checkbox>
+            <b-form-checkbox value="Reading">Reading</b-form-checkbox>
             <b-form-checkbox value="Dropped">Dropped</b-form-checkbox>
           </b-form-checkbox-group>
         </b-form-group>
@@ -106,11 +112,20 @@
                           placeholder="Enter author">
             </b-form-input>
           </b-form-group>
+        <b-form-group id="form-rating-edit-group"
+                      label="Rating:"
+                      label-for="form-rating-edit-input">
+            <b-form-input id="form-rating-edit-input"
+                          type="text"
+                          v-model="editForm.rating"
+                          placeholder="Enter rating out of 10">
+            </b-form-input>
+          </b-form-group>
         <b-form-group id="form-read-edit-group">
           <b-form-checkbox-group v-model="editForm.status" id="form-checks">
-            <b-form-checkbox value=Finished>Finished</b-form-checkbox>
+            <b-form-checkbox value="Finished">Finished</b-form-checkbox>
             <b-form-checkbox value="Want to read">Want to read</b-form-checkbox>
-            <b-form-checkbox value=Reading>Reading</b-form-checkbox>
+            <b-form-checkbox value="Reading">Reading</b-form-checkbox>
             <b-form-checkbox value="Dropped">Dropped</b-form-checkbox>
           </b-form-checkbox-group>
         </b-form-group>
@@ -132,12 +147,14 @@ export default {
         title: '',
         author: '',
         status: [],
+        rating: '',
       },
       editForm: {
         id: '',
         title: '',
         author: '',
         status: [],
+        rating: '',
       },
     };
   },
@@ -184,10 +201,12 @@ export default {
       this.addBookForm.title = '';
       this.addBookForm.author = '';
       this.addBookForm.status = [];
+      this.addBookForm.rating = '';
       this.editForm.id = '';
       this.editForm.title = '';
       this.editForm.author = '';
       this.editForm.status = [];
+      this.editForm.rating = '';
     },
     onSubmit(evt) {
       evt.preventDefault();
@@ -196,6 +215,7 @@ export default {
         title: this.addBookForm.title,
         author: this.addBookForm.author,
         status: this.addBookForm.status[0],
+        rating: this.addBookForm.rating,
       };
       this.addBook(payload);
       this.initForm();
@@ -207,6 +227,7 @@ export default {
         title: this.editForm.title,
         author: this.editForm.author,
         status: this.editForm.status,
+        rating: this.editForm.rating,
       };
       this.updateBook(payload, this.editForm.id);
     },
