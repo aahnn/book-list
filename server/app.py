@@ -70,37 +70,35 @@ def add_book():
     status = post_data.get('status')
     rating = post_data.get('rating')
 
-    new_book = Book(title, author, status, rating)
-    db.session.add(new_book)
+    if request.method == 'POST':
+        new_book = Book(title, author, status, rating)
+        db.session.add(new_book)
+
     db.session.commit()
 
     return book_schema.jsonify(new_book)
 
 
-@app.route('/books/<book_id>', methods=['PUT', 'DELETE'])
-def single_book(book_id):
-    response_object = {'status': 'success'}
-    if request.method == 'PUT':
-        post_data = request.get_json()
-        remove_book(book_id)
-        BOOKS.append({
-            'id': uuid.uuid4().hex,
-            'title': post_data.get('title'),
-            'author': post_data.get('author'),
-            'status': post_data.get('status'),
-            'rating': post_data.get('rating')
-        })
-    if request.method == 'DELETE':
-        remove_book(book_id)
-    return jsonify(response_object)
+@app.route('/books/<id>', methods=['PUT'])
+def update_book(id):
+    book = Book.query.get(id)
+    post_data = request.get_json()
+    book.title = post_data.get('title')
+    book.author = post_data.get('author')
+    book.status = post_data.get('status')
+    book.rating = post_data.get('rating')
+
+    db.session.commit()
+
+    return book_schema.jsonify(book)
 
 
-def remove_book(book_id):
-    for book in BOOKS:
-        if book['id'] == book_id:
-            BOOKS.remove(book)
-            return True
-    return False
+@app.route('/books/<id>', methods=['DELETE'])
+def delete_book(id):
+    book = Book.query.get(id)
+    db.session.delete(book)
+    db.session.commit()
+    return book_schema.jsonify(book)
 
 
 if __name__ == '__main__':
