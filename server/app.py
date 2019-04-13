@@ -1,6 +1,4 @@
 import os
-import uuid
-import sqlite3
 
 from flask import Flask, jsonify, request, g
 from flask_cors import CORS
@@ -18,18 +16,14 @@ DATABASE_PATH = os.path.join(basedir, DATABASE)
 SQLALCHEMY_DATABASE_URI = 'sqlite:///' + DATABASE_PATH
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 
-# instantiate the app
 app = Flask(__name__)
 app.config.from_object(__name__)
 db = SQLAlchemy(app)
 ma = Marshmallow(app)
-
-# enable CORS
 CORS(app)
 
 
 class Book(db.Model):
-
     __tablename__ = "book"
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String, nullable=False)
@@ -43,13 +37,11 @@ class Book(db.Model):
         self.status = status
         self.rating = rating
 
-    # def __repr__(self):
-    #     return '<title {}>'.format(self.title)
-
 
 class BookSchema(ma.ModelSchema):
     class Meta:
         model = Book
+
 
 book_schema = BookSchema()
 books_schema = BookSchema(many=True)
