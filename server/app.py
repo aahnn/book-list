@@ -1,18 +1,15 @@
 import os
 
-from flask import Flask, jsonify, request, g
+from flask import Flask, jsonify, request
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 
 
-basedir = os.path.abspath(os.path.dirname(__file__))
-
+BASEDIR = os.path.abspath(os.path.dirname(__file__))
 DATABASE = 'book.db'
 DEBUG = True
-
-DATABASE_PATH = os.path.join(basedir, DATABASE)
-
+DATABASE_PATH = os.path.join(BASEDIR, DATABASE)
 SQLALCHEMY_DATABASE_URI = 'sqlite:///' + DATABASE_PATH
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 
