@@ -50,6 +50,11 @@ def get_books():
     out = books_schema.dump(books).data
     return jsonify({'books': out})
 
+@app.route('/books/<sortby>', methods=['GET'])
+def sort_books(sortby):
+    books = Book.query.order_by(sortby).all()
+    out = books_schema.dump(books).data
+    return jsonify({'books': out})
 
 @app.route('/books', methods=['POST'])
 def add_book():
