@@ -9,10 +9,59 @@
         <table class="table table-hover">
           <thead>
             <tr>
-              <th scope="col">Title</th>
-              <th scope="col">Author</th>
-              <th scope="col">Status</th>
-              <th scope="col">Rating</th>
+              <!--<button-->
+                <!--scope = "col"-->
+                <!--type="button"-->
+                <!--@click="sortBooks('title')">-->
+                <!--Title-->
+              <!--</button>-->
+              <!--<button-->
+                <!--type="button"-->
+                <!--@click="sortBooks('author')">-->
+                <!--Author-->
+              <!--</button>-->
+              <!--<button-->
+                <!--type="button"-->
+                <!--@click="sortBooks('status')">-->
+                <!--Status-->
+              <!--</button>-->
+              <!--<button-->
+                <!--type="button"-->
+                <!--@click="sortBooks('rating')">-->
+                <!--Rating-->
+              <!--</button>-->
+              <th scope="col">
+                <button
+                  scope = "col"
+                  type="button"
+                  @click="sortBooks('title')">
+                  Title
+                </button>
+              </th>
+              <th scope="col">
+                <button
+                  scope = "col"
+                  type="button"
+                  @click="sortBooks('author')">
+                  Author
+                </button>
+              </th>
+              <th scope="col">
+                <button
+                  scope = "col"
+                  type="button"
+                  @click="sortBooks('status')">
+                  Status
+                </button>
+              </th>
+              <th scope="col">
+                <button
+                  scope = "col"
+                  type="button"
+                  @click="sortBooks('rating')">
+                  Rating
+                </button>
+              </th>
               <th></th>
             </tr>
           </thead>
@@ -161,6 +210,17 @@ export default {
   methods: {
     getBooks() {
       const path = 'http://localhost:5000/books';
+      axios.get(path)
+        .then((res) => {
+          this.books = res.data.books;
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.error(error);
+        });
+    },
+    sortBooks(sortby) {
+      const path = `http://localhost:5000/books/${sortby}`;
       axios.get(path)
         .then((res) => {
           this.books = res.data.books;
